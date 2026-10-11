@@ -1,6 +1,9 @@
 name: build
 on: [push, pull_request]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -34,6 +37,20 @@ jobs:
         with:
           name: pvp20-fabric-26.2
           path: build/libs/*.jar
+      - name: Publish direct-download JAR on the session branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/arena/a110658f-mda'
+        run: |
+          mkdir -p downloads
+          if [ -f downloads/pvp20-1.0.0.jar ] && cmp -s downloads/pvp20-1.0.0.jar build/libs/pvp20-1.0.0.jar; then
+            echo "Downloadable JAR is already up to date."
+            exit 0
+          fi
+          cp build/libs/pvp20-1.0.0.jar downloads/pvp20-1.0.0.jar
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add downloads/pvp20-1.0.0.jar
+          git commit -m "Publish PVP20 Fabric 26.2 JAR"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
       - name: Upload build log
         if: always()
         uses: actions/upload-artifact@v7
