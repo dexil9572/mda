@@ -18,7 +18,7 @@ public final class CombatWeaponItem extends Item {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (!attacker.level().isClientSide()) {
             switch (hitEffect) {
                 case SCORCH -> target.igniteForSeconds(2.5F);
@@ -35,8 +35,6 @@ public final class CombatWeaponItem extends Item {
             }
         }
 
-        // Returning true tells vanilla to consume weapon durability for this hit.
-        return true;
     }
 
     private static void apply(LivingEntity entity, Holder<MobEffect> effect, int duration, int amplifier) {

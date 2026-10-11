@@ -10,6 +10,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -27,7 +28,8 @@ public final class CombatAbilityItem extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        if (player.getCooldowns().isOnCooldown(this)) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (player.getCooldowns().isOnCooldown(stack)) {
             return InteractionResult.FAIL;
         }
 
@@ -35,7 +37,7 @@ public final class CombatAbilityItem extends Item {
             activate(level, player);
         }
 
-        player.getCooldowns().addCooldown(this, cooldownTicks);
+        player.getCooldowns().addCooldown(stack, cooldownTicks);
         return InteractionResult.SUCCESS;
     }
 
