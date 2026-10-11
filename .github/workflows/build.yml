@@ -22,7 +22,10 @@ jobs:
           status=$?
           tail -n 40 build.log
           if [ "$status" -ne 0 ]; then
-            message="$(awk '/^FAILURE: Build failed with an exception\./ { show = 1 } show { print } /^BUILD FAILED/ { exit }' build.log | head -n 50 | tr '\n' ' ' | sed 's/%/%25/g; s/\r/%0D/g')"
+            message="$(awk '/^FAILURE: Build failed with an exception\./ { show = 1 } show { print; if (/^\* Try:/) exit }' build.log | head -n 24 | tr '\n' ' ' | cut -c1-3000 | sed 's/%/%25/g; s/\r/%0D/g')"
+            if [ -z "$message" ]; then
+              message="$(head -n 24 build.log | tr '\n' ' ' | cut -c1-3000 | sed 's/%/%25/g; s/\r/%0D/g')"
+            fi
             echo "::error title=Gradle build failed::$message"
             exit "$status"
           fi
