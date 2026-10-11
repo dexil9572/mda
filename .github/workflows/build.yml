@@ -15,9 +15,25 @@ jobs:
           distribution: microsoft
           java-version: '25'
       - name: Build mod
-        run: ./gradlew build
+        id: build
+        run: |
+          set +e
+          ./gradlew build --console=plain --stacktrace > build.log 2>&1
+          status=$?
+          tail -n 40 build.log
+          if [ "$status" -ne 0 ]; then
+            message="$(tail -n 12 build.log | tr '\n' ' ' | sed 's/%/%25/g; s/\r/%0D/g')"
+            echo "::error title=Gradle build failed::$message"
+            exit "$status"
+          fi
       - name: Upload mod jar
         uses: actions/upload-artifact@v7
         with:
           name: pvp20-fabric-26.2
           path: build/libs/*.jar
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: pvp20-build-log
+          path: build.log
