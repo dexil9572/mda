@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "pvp20",
+  "version": "${version}",
+  "name": "Арсенал дуэлянта",
+  "description": "24 PvP-предмета, усиленная алмазная броня, команды выдачи и тайник-бункер.",
+  "authors": ["MDA"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ru.mda.pvp20.Pvp20"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

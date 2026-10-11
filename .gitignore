@@ -1,0 +1,20 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# IDEs
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+.vscode/
+
+# Minecraft run data
+run/
+
+# JVM crash/debug output
+hs_err_*.log
+*.hprof
+*.jfr
